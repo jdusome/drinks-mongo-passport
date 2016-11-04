@@ -1,0 +1,31 @@
+<% include partials/header.ejs %>
+
+<h1><%= title %></h1>
+
+<a href="/drinks/add">Add a Drink</a>
+
+
+<table class="table table-striped">
+  <tr>
+    <th>Name</th>
+    <th>Type</th>
+    <th>Size</th>
+    <th>Alchohol %</th>
+    <th>Edit</th>
+    <th>Delete</th>
+
+
+    <% for (var i=0; i < drinks.length; i++) { %>
+    <tr>
+    <td><%= drinks[i].name %></td>
+    <td><%= drinks[i].drinkType %></td>
+    <td><%= drinks[i].size %><%= drinks[i].units %></td>
+    <td><%= drinks[i].alcoholPercentage %>%</td>
+    <td><a href="/drinks/<%= drinks[i]._id %>">Edit</a></td>
+    <!-- Add a JQuery confirmation attribute -->
+    <td><a href="/drinks/delete/<%= drinks[i]._id %>" class="confirmation">Delete</a></td>
+  </tr>
+    <% } %>
+</table>
+
+<% include partials/footer.ejs %>
