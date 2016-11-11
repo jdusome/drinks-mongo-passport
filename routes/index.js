@@ -13,8 +13,8 @@ var flash = require('connect-flash');
 /* GET home page. */
 router.get('/', function(req, res, next) {
   res.render('index', {
-    title: 'Lesson 8',
-    message: 'Passport Authentication (Local) - Part 1',
+    title: 'Lesson 9',
+    message: 'Passport Authentication (Facebook & Github) - Part 2',
     user: req.user
 
   });
@@ -76,5 +76,30 @@ router.get('/logout', function(req, res, next){
   req.logout();
   res.redirect('/');
 });
+
+/* GET /facebook */
+router.get('/facebook', passport.authenticate('facebook'), function (req, res, next){});
+
+/* GET /facebook/callback */
+router.get('/facebook/callback', passport.authenticate('facebook', {
+      failureRedirect: '/login',
+      failureMessage: 'Invalid Login'
+}), function(req, res, next){
+  res.redirect('/drinks');
+});
+
+/* GET /github */
+router.get('/github', passport.authenticate('github'), function (req, res, next){});
+
+/* GET /github/callback */
+router.get('/github/callback', passport.authenticate('github', {
+  failureRedirect: '/login',
+  failureMessage: 'Invalid Login'
+}), function(req, res, next){
+  res.redirect('/drinks');
+});
+
+
+
 
 module.exports = router;

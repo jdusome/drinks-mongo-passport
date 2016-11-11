@@ -8,6 +8,8 @@ var plm = require('passport-local-mongoose');
 //username and password are automatically defined in passport if we use local strategy
 var accountSchema = new mongoose.Schema({
     //empty schema is okay
+    oauthID: String,
+    created: Date
 });
 
 //passport local model will use the accountSchema when storing user accounts

@@ -45,6 +45,96 @@ app.use(passport.session());
 var Account = require('./models/account');
 passport.use(Account.createStrategy());
 
+//configure facebook login
+var facebookStrategy = require('passport-facebook').Strategy;
+
+passport.use(new facebookStrategy({
+  clientID: config.ids.facebook.clientID,
+  clientSecret: config.ids.facebook.clientSecret,
+  callbackURL: config.ids.facebook.callbackURL
+}, function(accessToken, refreshToken, profile, cb) {
+      //what to do when facebook returns the profile
+      //returns profile, and callback function
+      //check if this facebook profile is already in our accounts collection
+      Account.findOne({oauthID: profile.id}, function (err, user) {
+        if (err) {
+          console.log(err);
+        }
+        else {
+          //if the user already exists, continue
+          if (user !== null) {
+            //run callback and whatever else happens after, send back the user account
+            //we send user to the next page (drink or wherever they are going after redirect)
+            cb(null, user);
+          }
+          else {
+            //valid user but not yet in mongoDB. add the user
+            user = new Account({
+              oauthID: profile.id,
+              //this will be different on github, they have a username field instead
+              username: profile.displayName,
+              created: Date.now()
+            });
+            //try to save the new user
+            user.save(function(err){
+              if (err){
+                console.log(err);
+              }
+              else {
+                cb(null, user);
+              }
+            });
+          }
+        }
+      });
+    }
+));
+
+//configure Github login
+var githubStrategy = require('passport-github').Strategy;
+
+passport.use(new githubStrategy({
+      clientID: config.ids.github.clientID,
+      clientSecret: config.ids.github.clientSecret,
+      callbackURL: config.ids.github.callbackURL
+    }, function(accessToken, refreshToken, profile, cb) {
+      //what to do when github returns the profile
+      //returns profile, and callback function
+      //check if this github profile is already in our accounts collection
+      Account.findOne({oauthID: profile.id}, function (err, user) {
+        if (err) {
+          console.log(err);
+        }
+        else {
+          //if the user already exists, continue
+          if (user !== null) {
+            //run callback and whatever else happens after, send back the user account
+            //we send user to the next page (drink or wherever they are going after redirect)
+            cb(null, user);
+          }
+          else {
+            //valid user but not yet in mongoDB. add the user
+            user = new Account({
+              oauthID: profile.id,
+              //this will be different on github, they have a username field instead
+              username: profile.userName,
+              created: Date.now()
+            });
+            //try to save the new user
+            user.save(function(err){
+              if (err){
+                console.log(err);
+              }
+              else {
+                cb(null, user);
+              }
+            });
+          }
+        }
+      });
+    }
+));
+
 // read/write users between passport and mongodb
 //will keep track of users between all pages of the application
 passport.serializeUser(Account.serializeUser());
