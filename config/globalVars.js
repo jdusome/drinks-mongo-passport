@@ -16,6 +16,13 @@ module.exports = {
             clientSecret: '098321dn023nd03d223d',
             //this is where facebook will redirect user on successful login
             callbackURL: 'http://localhost:3000/facebook/callback'
+        },
+
+        github: {
+            clientID: 'bcf98e57345699a97a60',
+            clientSecret: 'efc2842bf9c2b6d54339c47d57605dac6d8c748b',
+            //this is where facebook will redirect user on successful login
+            callbackURL: 'http://localhost:3000/github/callback'
         }
     }
 };
