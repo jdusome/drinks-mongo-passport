@@ -117,7 +117,7 @@ passport.use(new githubStrategy({
             user = new Account({
               oauthID: profile.id,
               //this will be different on github, they have a username field instead
-              username: profile.userName,
+              username: profile.username,
               created: Date.now()
             });
             //try to save the new user
